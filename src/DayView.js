@@ -85,24 +85,31 @@ export default class DayView extends React.PureComponent {
         timeText = !format24h ? `${i - 12} PM` : i
       }
       const { width, styles } = this.props
+      let startTime = moment(`${moment(this.props.date).format('YYYY-MM-DD')} ${i.toString().length < 2 ? `0${i}` : i}:00`).toISOString();
+      let endTime = moment(`${moment(this.props.date).format('YYYY-MM-DD')} ${(i+1).toString().length < 2 ? `0${i+1}` : i+1}:00`).toISOString()
+      let startHalfTime = moment(`${moment(this.props.date).format('YYYY-MM-DD')} ${i.toString().length < 2 ? `0${i}` : i}:30`).toISOString();
+      let endHalfTime = moment(`${moment(this.props.date).format('YYYY-MM-DD')} ${(i+1).toString().length < 2 ? `0${i+1}` : i+1}:30`).toISOString()
       return [
         <Text
           key={`timeLabel${i}`}
-          style={[styles.timeLabel, { top: offset * i - 6 }]}
+          style={[styles.timeLabel, { top: offset * i - 6, }]}
         >
           {timeText}
         </Text>,
-        i === 0 ? null : (
-          <View
+        i === 24 ? null : (
+          <TouchableOpacity
             key={`line${i}`}
-            style={[styles.line, { top: offset * i, width: width - 20 }]}
+            onPress={() => this._onBlankEventTapped({startTime: startTime, endTime: endTime})}
+            style={[styles.line, { top: offset * i, width: width - 20, height: offset*0.5, backgroundColor: 'transparent', borderBottomColor: 'rgb(216,216,216)', borderBottomWidth: 1 }]}
           />
         ),
-        <View
+        i === 24 ? null : (
+        <TouchableOpacity
           key={`lineHalf${i}`}
-          style={[styles.line, { top: offset * (i + 0.5), width: width - 20 }]}
+          onPress={() => this._onBlankEventTapped({startTime: startHalfTime, endTime: endHalfTime})}
+          style={[styles.line, { top: offset * (i + 0.5), width: width - 20, height: offset*0.5, backgroundColor: 'transparent', borderBottomColor: 'rgb(216,216,216)', borderBottomWidth: 1 }]}
         />
-      ]
+        )]
     })
   };
 
@@ -114,6 +121,10 @@ export default class DayView extends React.PureComponent {
         <View key={`line${i}`} style={[styles.line, { top: offset * i }]} />
       )
     })
+  }
+
+  _onBlankEventTapped (time) {
+    this.props.blankEventTapped(time)
   }
 
   _onEventTapped (event) {
@@ -138,7 +149,7 @@ export default class DayView extends React.PureComponent {
       return (
         <View
           key={i}
-          style={[styles.event, style]}
+          style={[styles.event, style ]}
         >
           {this.props.renderEvent ? this.props.renderEvent(event) : (
             <TouchableOpacity
@@ -180,7 +191,7 @@ export default class DayView extends React.PureComponent {
       >
         {this._renderLines()}
         {this._renderEvents()}
-        {this._renderRedLine()}
+        {this.props.redlineVisible && this._renderRedLine()}
       </ScrollView>
     )
   }
