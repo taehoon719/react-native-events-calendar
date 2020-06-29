@@ -183,7 +183,7 @@ export default class WeekView extends React.PureComponent {
                     {this.props.renderEvent ? this.props.renderEvent(event) : (
                         <TouchableOpacity
                             activeOpacity={0.5}
-                            onPress={() => { }}
+                            onPress={() => this._onEventTapped(this.props.events[event.index])}
                         >
                             <Text numberOfLines={1} style={styles.eventTitle}>{event.title || 'Event'}</Text>
                             {numberOfLines > 1
