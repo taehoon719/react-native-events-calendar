@@ -26,12 +26,8 @@ export default class WeekView extends React.PureComponent {
     constructor(props) {
         super(props)
         const width = ((props.width - LEFT_MARGIN) / props.numberOfView)
-        console.log(props.events)
-        console.log("DARTA")
-        props.events.forEach(ev => {
-            console.log(props.date.diff(ev.start, 'days'))
-
-        })
+        //console.log(props.events)
+        //console.log("DARTA")
         //console.log(props.data)
         //console.log(props.initDate);
         //console.log(props.size)
@@ -162,8 +158,8 @@ export default class WeekView extends React.PureComponent {
         const { styles } = this.props
         const { packedEvents } = this.state
         let events = packedEvents.map((event, i) => {
-            console.log(event);
-            console.log('packed')
+            //console.log(event);
+            //console.log('packed')
             const style = {
                 left: event.left + moment(event.start).diff(this.props.date, 'days') * this.state.width,
                 height: event.height,

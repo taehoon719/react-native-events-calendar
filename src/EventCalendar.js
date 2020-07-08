@@ -150,7 +150,7 @@ export default class EventCalendar extends React.Component {
           onMomentumScrollEnd={(event) => {
             const index = parseInt(event.nativeEvent.contentOffset.x / width)
             const date = moment(this.props.initDate).add(index - this.props.size, 'days')
-            console.log(date)
+            //console.log(date)
             this.setState({ index, date })
           }}
           {...virtualizedListProps}
