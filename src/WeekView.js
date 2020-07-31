@@ -69,12 +69,14 @@ export default class WeekView extends React.PureComponent {
         const timeNowMin = moment().minutes()
         return (
             <>
-            <View style={{  marginLeft: 50 -1, top: offset * timeNowHour + offset * timeNowMin / 60 - 4, width: width - 20, 
-                
-                width: 8, height: 8, borderRadius: 8, backgroundColor: styles.lineNow.backgroundColor}} />
-            <View key={`timeNow`}
-                style={[styles.lineNow, { top: offset * timeNowHour + offset * timeNowMin / 60, width: width - 20 }]}
-            />
+                <View style={{
+                    marginLeft: 50 - 1, top: offset * timeNowHour + offset * timeNowMin / 60 - 4, width: width - 20,
+
+                    width: 8, height: 8, borderRadius: 8, backgroundColor: styles.lineNow.backgroundColor
+                }} />
+                <View key={`timeNow`}
+                    style={[styles.lineNow, { top: offset * timeNowHour + offset * timeNowMin / 60, width: width - 20 }]}
+                />
             </>
         )
     }
@@ -110,12 +112,12 @@ export default class WeekView extends React.PureComponent {
                 this.props.numberOfView === 1 &&
                 <View
                     key={`line${i}`}
-                    style={[styles.line, { top: (offset * i)-1, left: LEFT_MARGIN -10, width: 10, }]}
+                    style={[styles.line, { top: (offset * i) - 1, left: LEFT_MARGIN - 10, width: 10, }]}
                 />,
                 this.props.numberOfView === 1 &&
                 <View
                     key={`line${i}`}
-                    style={[styles.line, { top: (offset * (i + 0.5))-1, left: LEFT_MARGIN -10, width: 10, }]}
+                    style={[styles.line, { top: (offset * (i + 0.5)) - 1, left: LEFT_MARGIN - 10, width: 10, }]}
                 />,
                 range(0, this.props.numberOfView).map((it, ind) => (
                     i === 24 ? null : (
@@ -169,7 +171,10 @@ export default class WeekView extends React.PureComponent {
                 left: event.left + moment(event.start).diff(this.props.date, 'days') * this.state.width,
                 height: event.height,
                 width: event.width,
-                top: event.top
+                top: event.top,
+                borderWidth: 2,
+                borderColor: event.color,
+                borderRadius: 5,
             }
 
             // Fixing the number of lines for the event title makes this calculation easier.
@@ -177,15 +182,14 @@ export default class WeekView extends React.PureComponent {
             const numberOfLines = Math.floor(event.height / TEXT_LINE_HEIGHT)
             const formatTime = this.props.format24h ? 'HH:mm' : 'hh:mm A'
             return (
-                <View
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => this._onEventTapped({actualEvent: this.props.events[event.index], eventData: event})}
                     key={i}
                     style={[styles.event, style]}
                 >
                     {this.props.renderEvent ? this.props.renderEvent(event) : (
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={() => this._onEventTapped(this.props.events[event.index])}
-                        >
+                        <View>
                             <Text numberOfLines={1} style={styles.eventTitle}>{event.title || 'Event'}</Text>
                             {numberOfLines > 1
                                 ? <Text
@@ -198,9 +202,9 @@ export default class WeekView extends React.PureComponent {
                             {numberOfLines > 2
                                 ? <Text style={styles.eventTimes} numberOfLines={1}>{moment(event.start).format(formatTime)} - {moment(event.end).format(formatTime)}</Text>
                                 : null}
-                        </TouchableOpacity>
+                        </View>
                     )}
-                </View>
+                </TouchableOpacity>
             )
         })
 

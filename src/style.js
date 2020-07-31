@@ -40,6 +40,7 @@ export default function styleConstructor (
     },
     event: {
       position: 'absolute',
+      marginLeft: 5,
       backgroundColor: '#F0F4FF',
       opacity: 0.8,
       borderColor: '#DDE5FD',
