@@ -68,9 +68,14 @@ export default class WeekView extends React.PureComponent {
         const timeNowHour = moment().hour()
         const timeNowMin = moment().minutes()
         return (
+            <>
+            <View style={{  marginLeft: 50 -1, top: offset * timeNowHour + offset * timeNowMin / 60 - 4, width: width - 20, 
+                
+                width: 8, height: 8, borderRadius: 8, backgroundColor: styles.lineNow.backgroundColor}} />
             <View key={`timeNow`}
                 style={[styles.lineNow, { top: offset * timeNowHour + offset * timeNowMin / 60, width: width - 20 }]}
             />
+            </>
         )
     }
 
