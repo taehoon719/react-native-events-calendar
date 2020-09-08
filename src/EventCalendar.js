@@ -86,6 +86,7 @@ export default class EventCalendar extends React.Component {
             date={moment(initDate)}
             data={this.props.events}
             format24h={format24h}
+            availability={this.props.availability}
             formatHeader={this.props.formatHeader}
             headerStyle={this.props.headerStyle}
             renderEvent={this.props.renderEvent}

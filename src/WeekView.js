@@ -3,12 +3,15 @@ import {
     View,
     Text,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from 'react-native'
 import populateEvents from './Packer'
 import React from 'react'
 import moment from 'moment'
 import _ from 'lodash'
+import BlockedTime from './BlockedTime.png';
+import BlockedTimeWeek from './BlockedTimeWeek.png';
 
 const LEFT_MARGIN = 60 - 1
 // const RIGHT_MARGIN = 10
@@ -124,8 +127,24 @@ export default class WeekView extends React.PureComponent {
                         <TouchableOpacity
                             key={`line${i}`}
                             onPress={() => this._onBlankEventTapped({ startTime: moment(startTime).add(ind, 'days').toISOString(), endTime: moment(endTime.add(ind, 'days')).toISOString() })}
+                            disabled={this.props.availability && (
+                                (parseInt(moment(startTime).add(ind, 'days').format('H')) < this.props.availability[moment(startTime).add(ind, 'days').format('dddd').toUpperCase()][0].startHour)
+                                || (this.props.availability[moment(endTime).add(ind, 'days').format('dddd').toUpperCase()][0].endHour <= parseInt(moment(startTime).add(ind, 'days').format('H')))
+
+                            )}
                             style={[styles.line, { borderLeftWidth: 1, borderLeftColor: 'rgb(216,216,216)', top: offset * i, left: LEFT_MARGIN + ind * this.state.width, width: this.state.width, height: offset * 0.5, backgroundColor: 'transparent', borderBottomColor: 'rgb(216,216,216)', borderBottomWidth: 1 }]}
-                        />
+                        >
+                            {this.props.availability && (
+                                (parseInt(moment(startTime).add(ind, 'days').format('H')) < this.props.availability[moment(startTime).add(ind, 'days').format('dddd').toUpperCase()][0].startHour)
+                                || (this.props.availability[moment(endTime).add(ind, 'days').format('dddd').toUpperCase()][0].endHour <= parseInt(moment(startTime).add(ind, 'days').format('H')))
+
+                            )
+                                ?
+                                <Image source={this.props.numberOfView < 7 ? BlockedTime : BlockedTimeWeek} style={{ width: '100%', height: '100%' }} />
+                                :
+                                null
+                            }
+                        </TouchableOpacity>
                     )
                 )),
                 range(0, this.props.numberOfView).map((it, ind) => (
@@ -133,8 +152,21 @@ export default class WeekView extends React.PureComponent {
                         <TouchableOpacity
                             key={`lineHalf${i}`}
                             onPress={() => this._onBlankEventTapped({ startTime: moment(startHalfTime).add(ind, 'days').toISOString(), endTime: moment(endHalfTime).add(ind, 'days').toISOString() })}
+                            disabled={this.props.availability && (
+                                (parseInt(moment(startHalfTime).add(ind, 'days').format('H')) < this.props.availability[moment(startHalfTime).add(ind, 'days').format('dddd').toUpperCase()][0].startHour)
+                                || (this.props.availability[moment(endTime).add(ind, 'days').format('dddd').toUpperCase()][0].endHour <= parseInt(moment(startHalfTime).add(ind, 'days').format('H')))
+                            )}
                             style={[styles.line, { borderLeftWidth: 1, borderLeftColor: 'rgb(216,216,216)', top: offset * (i + 0.5), left: LEFT_MARGIN + ind * this.state.width, width: this.state.width, height: offset * 0.5, backgroundColor: 'transparent', borderBottomColor: 'rgb(216,216,216)', borderBottomWidth: 1 }]}
-                        />
+                        >
+                            {this.props.availability && (
+                                (parseInt(moment(startHalfTime).add(ind, 'days').format('H')) < this.props.availability[moment(startHalfTime).add(ind, 'days').format('dddd').toUpperCase()][0].startHour)
+                                || (this.props.availability[moment(endTime).add(ind, 'days').format('dddd').toUpperCase()][0].endHour <= parseInt(moment(startHalfTime).add(ind, 'days').format('H')))
+                            )
+                                ?
+                                < Image source={this.props.numberOfView < 7 ? BlockedTime : BlockedTimeWeek} style={{ width: '100%', height: '100%' }} />
+                                : null
+                            }
+                        </TouchableOpacity>
                     )
                 )),
 
@@ -184,7 +216,7 @@ export default class WeekView extends React.PureComponent {
             return (
                 <TouchableOpacity
                     activeOpacity={0.5}
-                    onPress={() => this._onEventTapped({actualEvent: this.props.events[event.index], eventData: event})}
+                    onPress={() => this._onEventTapped({ actualEvent: this.props.events[event.index], eventData: event })}
                     key={i}
                     style={[styles.event, style]}
                 >
